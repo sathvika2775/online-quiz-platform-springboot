@@ -32,4 +32,9 @@ public class QuestionController {
     public List<Question> getQuestionsByCategory(@PathVariable String category) {
         return service.getQuestionsByCategory(category);
     }
+
+    @GetMapping("/questions/difficulty/{difficultyLevel}")
+    public List<Question> getQuestionsByDifficultyLevel(@PathVariable String difficultyLevel) {
+        return service.getQuestionsByDifficultyLevel(difficultyLevel);
+    }
 }

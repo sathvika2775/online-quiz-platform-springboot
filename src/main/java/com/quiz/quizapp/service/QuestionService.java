@@ -25,4 +25,8 @@ public class QuestionService {
     public List<Question> getQuestionsByCategory(String category) {
         return repo.findByCategory(category);
     }
+
+    public List<Question> getQuestionsByDifficultyLevel(String difficultyLevel){
+        return repo.findByDifficultyLevel(difficultyLevel);
+    }
 }
