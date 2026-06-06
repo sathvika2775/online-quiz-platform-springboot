@@ -1,4 +1,3 @@
-
 package com.quiz.quizapp.repository;
 
 import java.util.List;
