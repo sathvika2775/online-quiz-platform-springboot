@@ -1,4 +1,5 @@
 package com.quiz.quizapp.controller;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,8 @@ public class QuizController {
     QuizService quizService;
 
     @GetMapping("/quiz/create")
-    public Quiz createQuiz(@RequestParam String category, @RequestParam Integer numQ) {
+    public Quiz createQuiz(@RequestParam String category,
+                           @RequestParam Integer numQ) {
         return quizService.createQuiz(category, numQ);
     }
 
@@ -32,7 +34,7 @@ public class QuizController {
     }
 
     @PostMapping("/quiz/submit/{id}")
-    public Result submitQuiz(@PathVariable Integer id,@RequestBody List<Response> responses) {
+    public Result submitQuiz(@PathVariable Integer id, @RequestBody List<Response> responses) {
         return quizService.calculateResult(id, responses);
     }
 
@@ -40,5 +42,4 @@ public class QuizController {
     public List<QuestionWrapper> getQuizQuestions(@PathVariable Integer id) {
         return quizService.getQuizQuestions(id);
     }
-
 }
