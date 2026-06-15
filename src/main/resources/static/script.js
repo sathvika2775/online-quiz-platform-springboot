@@ -1,4 +1,6 @@
 let currentQuizId = null;
+let timer;
+let timeLeft = 60;
 
 async function createQuiz() {
 
@@ -35,6 +37,7 @@ async function createQuiz() {
             `<h3>✅ ${quiz.title} Created Successfully</h3>`;
 
         loadQuestions(quiz.id);
+        startTimer();
 
     } catch (error) {
 
@@ -109,7 +112,7 @@ async function loadQuestions(id) {
 }
 
 async function submitQuiz() {
-
+    clearInterval(timer);
     const selectedAnswers =
         document.querySelectorAll(
             'input[type="radio"]:checked'
@@ -145,13 +148,39 @@ async function submitQuiz() {
 
         const result = await response.json();
 
-        document.getElementById("score").innerHTML =
-            `
-            <div class="score-card">
-                <h2>🎯 Score : ${result.score}/${result.totalQuestions}</h2>
-            </div>
-            `;
+            let message = "";
+            let color = "";
+            if(result.score ===0){
+                message = "😢 Better Luck Next Time!";
+                color="red";
+            }
+            else if(result.score === result.totalQuestions){
+                message = "🏆 Excellent!";
+                color="green";
+            }
+            else if(result.score >= result.totalQuestions / 2){
+                message = "😊 Good Job!";
+                color="yellow";
+            }
+        else{
+            message = "😢 Better Luck Next Time!";
+            color="orange";
+        }
 
+        document.getElementById("score").innerHTML =
+        `
+        <div class="score-card">
+
+            <h2 style="color:${color}">
+                🎯 Score : ${result.score}/${result.totalQuestions}
+            </h2>
+
+            <h3 style="color:${color}">
+                ${message}
+            </h3>
+
+        </div>
+        `;
         document.getElementById("restartSection").innerHTML =
             `
             <button onclick="restartQuiz()">
@@ -170,6 +199,8 @@ async function submitQuiz() {
 function restartQuiz() {
 
     currentQuizId = null;
+    clearInterval(timer);
+    document.getElementById("timer").innerHTML = "";
 
     document.getElementById("category").value = "";
     document.getElementById("numQ").value = "";
@@ -184,4 +215,32 @@ function clearQuizData() {
     document.getElementById("submitSection").innerHTML = "";
     document.getElementById("score").innerHTML = "";
     document.getElementById("restartSection").innerHTML = "";
+}
+
+function startTimer() {
+
+    clearInterval(timer);
+
+    timeLeft = 60;
+
+    document.getElementById("timer").innerHTML =
+        `<h3>⏳ Time Left: ${timeLeft}s</h3>`;
+
+    timer = setInterval(() => {
+
+        timeLeft--;
+
+        document.getElementById("timer").innerHTML =
+            `<h3>⏳ Time Left: ${timeLeft}s</h3>`;
+
+        if (timeLeft <= 0) {
+
+            clearInterval(timer);
+
+            alert("Time is up!");
+
+            submitQuiz();
+        }
+
+    }, 1000);
 }
